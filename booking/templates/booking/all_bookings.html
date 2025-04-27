@@ -1,0 +1,83 @@
+{% extends "booking/base.html" %}
+
+{% block title %}การจองทั้งหมด{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">รายการจองทั้งหมด</h2>
+    <div class="list-group mb-4">
+        {% for booking in bookings %}
+        <div class="list-group-item">
+            <div class="d-flex w-100 justify-content-between align-items-start">
+                <h5 class="mb-1">ห้อง {{ booking.room.name }}</h5>
+                <small class="text-muted">จองเมื่อ: {{ booking.booking_time|date:"d/m/Y H:i" }}</small>
+            </div>
+
+            {# --- Modified Section Start --- #}
+            <div class="row w-100 align-items-center mt-1 gx-2"> {# Use row, keep align-items, gx-2 adds small horizontal gutters #}
+                <div class="col-5"> {# Adjust col-5 as needed for "โดย" #}
+                    <p class="mb-1">โดย: <strong>{{ booking.user_name }}</strong></p>
+                </div>
+                <div class="col-4"> {# Adjust col-4 as needed for "ราคา" to align with the red line #}
+                    <small class="text-muted">ราคา: {{ booking.total_price|floatformat:2 }} บาท</small>
+                </div>
+                <div class="col-3 text-end"> {# Adjust col-3 and use text-end for "ระยะเวลา" #}
+                    <small class="text-muted">ระยะเวลา: {{ booking.duration_hours|floatformat:2 }} ชั่วโมง</small>
+                </div>
+            </div>
+            {# --- Modified Section End --- #}
+
+            <div class="d-flex w-100 justify-content-between align-items-center mt-2"> {# เพิ่ม div ใหม่สำหรับเวลาและปุ่ม #}
+                <small class="text-muted">เวลา: {{ booking.start_time|date:"d/m/Y H:i" }} - {{ booking.end_time|date:"d/m/Y H:i" }}</small>
+                
+                <div>
+            
+                    {# กลุ่มของปุ่ม #}
+                    {# --- ปุ่มแก้ไข --- #}
+                    <a href="{% url 'booking_edit' booking.id %}" class="btn btn-sm btn-outline-warning me-1" title="แก้ไขการจอง">
+                        <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">แก้ไข</span> {# ซ่อนข้อความบนจอเล็ก #}
+                    </a>
+                    {# --- ปุ่มลบ --- #}
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal{{ booking.id }}" title="ลบการจอง">
+                        <i class="fas fa-trash-alt"></i> <span class="d-none d-sm-inline">ลบ</span> {# ซ่อนข้อความบนจอเล็ก #}
+                    </button>
+
+                    {# --- Modal ยืนยันการลบ (ต่อรายการ) --- #}
+                    <div class="modal fade" id="deleteConfirmModal{{ booking.id }}" tabindex="-1" aria-labelledby="deleteConfirmModalLabel{{ booking.id }}" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="deleteConfirmModalLabel{{ booking.id }}"><i class="fas fa-exclamation-triangle text-danger me-2"></i>ยืนยันการลบ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            คุณแน่ใจหรือไม่ว่าต้องการลบการจองห้อง **{{ booking.room.name }}** <br>
+                            โดย **{{ booking.user_name }}** <br>
+                            เวลา **{{ booking.start_time|date:"d/m H:i" }} - {{ booking.end_time|date:"H:i" }}**?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i>ยกเลิก</button>
+                            {# ฟอร์มสำหรับส่งคำขอลบ (ใช้ POST method เพื่อความปลอดภัย) #}
+                            <form action="{% url 'booking_delete' booking.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt me-1"></i>ยืนยันการลบ</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {# --- จบ Modal --- #}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="list-group-item">
+             <p class="mb-0 text-muted text-center"><i class="fas fa-info-circle me-1"></i>ยังไม่มีการจองในระบบ</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+      <a href="{% url 'room_list' %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left me-1"></i> กลับไปหน้าแรก
+      </a>
+    </div>
+{% endblock %}

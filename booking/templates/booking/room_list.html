@@ -1,0 +1,63 @@
+{% extends "booking/base.html" %}
+
+{% block title %}เลือกห้องคาราโอเกะ{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4 text-center">เลือกห้องคาราโอเกะที่ต้องการ</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for room in rooms %}
+        <div class="col">
+          <div class="card h-100">
+
+            {# --- เริ่ม ส่วนเช็คชื่อห้องเพื่อเปลี่ยนรูปภาพ --- #}
+            {% if "VIP" in room.name|upper %} {# ตรวจหาคำว่า VIP (ไม่สนตัวพิมพ์เล็ก/ใหญ่) #}
+                {# รูปสำหรับห้อง VIP (เช่น ใช้สีม่วง) #}
+                <img src="https://i.pinimg.com/736x/8a/22/20/8a2220c87ecca233016a6f2b876efcb6.jpg" class="card-img-top" alt="ห้อง VIP {{ room.name }}">
+
+            {% elif "STANDARD" in room.name|upper %} {# ตรวจหาคำว่า STANDARD #}
+                {# รูปสำหรับห้อง Standard (เช่น ใช้สีน้ำเงิน) #}
+                <img src="https://i.pinimg.com/736x/c1/73/df/c173df847b03820eb7c2d5dc7ae8e97b.jpg" class="card-img-top" alt="ห้อง Standard {{ room.name }}">
+
+            {% else %} {# กรณีไม่พบคำว่า VIP หรือ STANDARD ในชื่อ #}
+                {# รูปเริ่มต้น (อาจจะเป็นสีเทา หรือสีเดิม) #}
+                <img src="https://placehold.co/600x400/adb5bd/white?text=ห้อง {{room.name|urlencode}}&font=kanit" class="card-img-top" alt="ห้อง {{ room.name }}">
+            {% endif %}
+            {# --- จบ ส่วนเช็คชื่อห้องเพื่อเปลี่ยนรูปภาพ --- #}
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ room.name }}</h5>
+              <p class="card-text text-muted mb-1">
+                <i class="fas fa-users me-1"></i> ความจุ: {{ room.capacity }} คน
+              </p>
+               <p class="card-text text-muted">
+                <i class="fas fa-dollar-sign me-1"></i> ราคา: {{ room.price_per_hour|floatformat:2 }} บาท/ชม.
+              </p>
+              {% if user.is_authenticated %}
+              <a href="{% url 'booking_view' room.id %}" class="btn btn-primary mt-auto">
+                <i class="fas fa-calendar-check me-1"></i> จองห้องนี้
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}?next={% url 'booking_view' room.id %}" class="btn btn-secondary mt-auto">
+                <i class="fas fa-lock me-1"></i> เข้าสู่ระบบเพื่อจอง
+              </a>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+             <div class="alert alert-warning text-center" role="alert">
+               <i class="fas fa-info-circle me-2"></i> ยังไม่มีห้องคาราโอเกะในระบบ
+             </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {# Link ดูการจองทั้งหมด #}
+    <div class="text-center mt-5">
+      <a href="{% url 'all_bookings' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-list-check me-1"></i> ดูรายการจองทั้งหมด
+      </a>
+    </div>
+{% endblock %}

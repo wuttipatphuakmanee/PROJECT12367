@@ -1,0 +1,50 @@
+{% extends "booking/base.html" %}
+
+{% block title %}การจองสำเร็จ{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-5"> {# จัดกลาง #}
+      <i class="fas fa-check-circle fa-4x text-success mb-3"></i> {# ไอคอนใหญ่สีเขียว #}
+      <h2 class="display-6 text-success">การจองของท่านสำเร็จ!</h2>
+      <p class="lead">รายละเอียดการจองของคุณมีดังนี้</p>
+    </div>
+
+    <div class="card shadow-sm mb-4 mx-auto" style="max-width: 600px;"> {# ใช้ Card ครอบ + กำหนดขนาด #}
+        <div class="card-header text-center bg-light fw-bold">
+            <i class="fas fa-receipt me-1"></i> รายละเอียดการจอง (รหัส: {{ booking.id }})
+        </div>
+        <div class="card-body p-4">
+            <dl class="row">
+              <dt class="col-sm-4"><i class="fas fa-door-open me-1 text-muted"></i> ห้อง:</dt>
+              <dd class="col-sm-8">{{ booking.room.name }}</dd>
+
+              <dt class="col-sm-4"><i class="fas fa-user me-1 text-muted"></i> ผู้จอง:</dt>
+              <dd class="col-sm-8">{{ booking.user_name }}</dd>
+
+              <dt class="col-sm-4"><i class="fas fa-clock me-1 text-muted"></i> เวลาเริ่มต้น:</dt>
+              <dd class="col-sm-8">{{ booking.start_time|date:"l, d F Y เวลา H:i" }}</dd>
+
+              <dt class="col-sm-4"><i class="fas fa-flag-checkered me-1 text-muted"></i> เวลาสิ้นสุด:</dt>
+              <dd class="col-sm-8">{{ booking.end_time|date:"l, d F Y เวลา H:i" }}</dd>
+
+              <dt class="col-sm-4"><i class="fas fa-hourglass-half me-1 text-muted"></i> ระยะเวลา:</dt>
+              <dd class="col-sm-8">{{ booking.duration_hours|floatformat:2 }} ชั่วโมง</dd>
+
+              <dt class="col-sm-4"><i class="fas fa-money-bill-wave me-1 text-muted"></i> ราคาโดยประมาณ:</dt>
+              <dd class="col-sm-8 fw-bold">{{ booking.total_price|floatformat:2 }} บาท</dd>
+
+              <dt class="col-sm-4 text-truncate"><i class="fas fa-calendar-day me-1 text-muted"></i> จองเมื่อ:</dt>
+              <dd class="col-sm-8">{{ booking.booking_time|date:"d/m/Y H:i" }}</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="text-center mt-4 d-grid gap-2 d-sm-flex justify-content-sm-center"> {# จัดปุ่ม #}
+        <a href="{% url 'room_list' %}" class="btn btn-primary btn-lg px-4 gap-3">
+            <i class="fas fa-home me-1"></i> กลับหน้าแรก
+        </a>
+        <a href="{% url 'all_bookings' %}" class="btn btn-outline-secondary btn-lg px-4">
+             <i class="fas fa-list-check me-1"></i> ดูการจองทั้งหมด
+        </a>
+    </div>
+{% endblock %}
