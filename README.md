@@ -93,18 +93,24 @@
 ## 🧱 โครงสร้างโปรเจกต์ (Project Structure)
 ```
 kraoke_project/
-├── accounts/                           # ระบบผู้ใช้
-├── accounts/templates/                 # ฟอร์มติดต่อทีมงาน
-│           ├── login.html              # แบบฟอร์มเข้าสู่ระบบ
-│           └── register.html           # แบบฟอร์มสมัครสมาชิก
-├── booking/                            # ฟังก์ชันในการจองทั้งหมด
-├── booking/templates/                  # ฟอร์มติดต่อทีมงาน
-│           ├── base.html               # Navbar & Footer
-│           ├── all_bookings.html       # การจองทั้งหมด
-│           ├── booking_form.html       # ฟอร์มการจอง
-│           ├── booking_success.html    # หน้าเมื่อจองเสร็จ
-│           └── room_list.html          # รายการห้องให้เลือกจอง
-└── README.md
+├── accounts/                                     # แอปพลิเคชันจัดการระบบผู้ใช้
+│   ├── templates/
+│   │   └── accounts/
+│   │       ├── login.html                        # เทมเพลตหน้าเข้าสู่ระบบ
+│   │       └── register.html                     # เทมเพลตหน้าลงทะเบียน
+│   └── ... (models.py, views.py, urls.py, etc.)
+├── booking/                                      # แอปพลิเคชันจัดการระบบการจอง
+│   ├── templates/
+│   │   └── booking/
+│   │       ├── base.html                         # เทมเพลตหลัก (Navbar & Footer)
+│   │       ├── all_bookings.html                 # เทมเพลตแสดงรายการจองทั้งหมด
+│   │       ├── booking_form.html                 # เทมเพลตฟอร์มการจอง
+│   │       ├── booking_success.html              # เทมเพลตแสดงผลเมื่อจองสำเร็จ
+│   │       └── room_list.html                    # เทมเพลตแสดงรายการห้อง
+│   └── ... (models.py, views.py, urls.py, etc.)
+├── kraoke_project/                               # โฟลเดอร์โปรเจกต์หลัก (settings.py, urls.py)
+├── manage.py                                     # สคริปต์จัดการ Django
+└── README.md                                     # เอกสารแนะนำโครงการ
 ```
 *(โครงสร้างอาจแสดงเฉพาะส่วนที่สำคัญ)*
 
