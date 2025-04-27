@@ -46,7 +46,7 @@
 
 ---
 
-## 🖼 ตัวอย่างหน้าจอระบบ (Screenshots)
+## 🖼 ตัวอย่างหน้าจอระบบ (Screenshots) คลิกลูกศรลงเพื่อแสดงภาพ
 
 <details>
 <summary><strong>🗟 หน้าแรก (ยังไม่ล็อกอิน)</strong></summary>
@@ -91,38 +91,18 @@
 ---
 
 ## 🧱 โครงสร้างโปรเจกต์ (Project Structure)
-karaoke_project/
-├── karaoke_project/      # Project configuration (settings.py, urls.py)
-├── accounts/             # Django App: User authentication (login, register)
-├── booking/              # Django App: Core booking functionality
-│   ├── migrations/       # Database migration files
-│   ├── templates/        # HTML templates for the booking app
-│   │   └── booking/
-│   │       ├── base.html
-
-│   │       ├── room_list.html
-
-│   │       ├── booking_form.html
-
-│   │       ├── booking_success.html
-
-│   │       └── all_bookings.html
-
-│   ├── admin.py
-
-│   ├── apps.py
-
-│   ├── forms.py
-
-│   ├── models.py
-
-│   ├── tests.py          # Test file (currently empty)
-│   ├── urls.py
-
-│   └── views.py
-
-├── manage.py             # Django's command-line utility
-└── README.md             # This file
+```
+kraoke_project/
+├── accounts/                           # ระบบผู้ใช้
+├── booking/                            # ฟังก์ชันในการจองทั้งหมด
+├── booking/templates/                  # ฟอร์มติดต่อทีมงาน
+│           ├── base.html               # Navbar & Footer
+│           ├── all_bookings.html       # การจองทั้งหมด
+│           ├── booking_form.html       # ฟอร์มการจอง
+│           ├── booking_success.html    # หน้าเมื่อจองเสร็จ
+│           └── room_list.html          # รายการห้องให้เลือกจอง
+└── README.md
+```
 *(โครงสร้างอาจแสดงเฉพาะส่วนที่สำคัญ)*
 
 ---
@@ -173,7 +153,7 @@ karaoke_project/
 
 ---
 
-## 💌 ติดต่อผู้พัฒนา (Contributors)
+## 💌 ติดต่อผู้พัฒนา (Contributors) คลิกอีเมลเพื่อติดต่อ
 
 <div align="center">
 
