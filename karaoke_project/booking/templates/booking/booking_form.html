@@ -1,0 +1,127 @@
+{# booking/templates/booking/booking_form.html #}
+{% extends "booking/base.html" %}
+
+{% block title %}
+    {# เปลี่ยน Title ตาม context ที่ส่งมา #}
+    {% if booking %}
+        แก้ไขการจองห้อง {{ room.name }}
+    {% else %}
+        จองห้อง {{ room.name }}
+    {% endif %}
+{% endblock %}
+
+{% load static %}
+{% block content %}
+    <h2 class="mb-4 text-center">
+        {# เปลี่ยน Header ตาม context #}
+        {% if booking %}
+            แก้ไขการจองห้อง: <span class="text-primary">{{ room.name }}</span>
+            <p class="text-muted small">รหัสการจอง: {{ booking.id }}</p> {# แสดง ID การจองด้วย #}
+        {% else %}
+            ดำเนินการจองห้อง: <span class="text-primary">{{ room.name }}</span>
+        {% endif %}
+    </h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                 <div class="card-header bg-light">
+                     <i class="fas fa-door-open me-1"></i> รายละเอียดห้อง: {{ room.name }} (จุ {{ room.capacity }} คน | {{ room.price_per_hour|floatformat:2 }} บาท/ชม.)
+                 </div>
+                <div class="card-body p-4">
+                    {# ฟอร์มจะทำงานกับ URL ปัจจุบัน ซึ่งถูกต้องทั้งตอนสร้างและแก้ไข #}
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {# ... ส่วน input fields ของฟอร์ม (user_name, start_time, end_time) เหมือนเดิม ... #}
+
+                        <div class="mb-3">
+                            <label for="{{ form.user_name.id_for_label }}" class="form-label fw-bold">{{ form.user_name.label }}</label> {# เพิ่ม fw-bold #}
+                            <input type="text" name="{{ form.user_name.name }}" id="{{ form.user_name.id_for_label }}"
+                                   class="form-control {% if form.user_name.errors %}is-invalid{% endif %}"
+                                   value="{{ form.user_name.value|default:'' }}" required placeholder="กรุณาระบุชื่อผู้จอง">
+                            {% if form.user_name.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.user_name.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row"> {# จัดเวลาเป็น 2 คอลัมน์ #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.start_time.id_for_label }}" class="form-label fw-bold">{{ form.start_time.label }}</label>
+                                {# ในการแก้ไข ต้อง format ค่า value ให้ถูกต้อง #}
+                                <input type="datetime-local" name="{{ form.start_time.name }}" id="{{ form.start_time.id_for_label }}"
+                                       class="form-control {% if form.start_time.errors %}is-invalid{% endif %}"
+                                       value="{{ form.start_time.value|date:'Y-m-d\TH:i'|default:'' }}" required>
+                                {% if form.start_time.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.start_time.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.end_time.id_for_label }}" class="form-label fw-bold">{{ form.end_time.label }}</label>
+                                {# ในการแก้ไข ต้อง format ค่า value ให้ถูกต้อง #}
+                                <input type="datetime-local" name="{{ form.end_time.name }}" id="{{ form.end_time.id_for_label }}"
+                                       class="form-control {% if form.end_time.errors %}is-invalid{% endif %}"
+                                       value="{{ form.end_time.value|date:'Y-m-d\TH:i'|default:'' }}" required>
+                                {% if form.end_time.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.end_time.errors|striptags }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            {# ปุ่มยกเลิกควรกลับไปหน้ารายการจองทั้งหมดเสมอ #}
+                            <a href="{% url 'all_bookings' %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> ยกเลิก
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                {# เปลี่ยนข้อความปุ่ม #}
+                                {% if booking %}
+                                    <i class="fas fa-save me-1"></i> บันทึกการแก้ไข
+                                {% else %}
+                                    <i class="fas fa-check-circle me-1"></i> ยืนยันการจอง
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {# ส่วนแสดงการจองที่มีอยู่ (อาจจะไม่ต้องแสดงในหน้าแก้ไข) #}
+            {% if not booking %} {# แสดงเฉพาะตอนสร้างใหม่ #}
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                     <i class="fas fa-history me-1"></i> การจองที่มีอยู่สำหรับห้องนี้
+                </div>
+                <div class="list-group list-group-flush">
+                     {% for b in room.bookings.all|slice:":5" %}
+                         <div class="list-group-item d-flex justify-content-between align-items-center">
+                             <span><i class="fas fa-user me-2 text-muted"></i>{{ b.user_name }}</span>
+                             <small class="text-muted">{{ b.start_time|date:"d/m H:i" }} - {{ b.end_time|date:"H:i" }}</small>
+                         </div>
+                     {% empty %}
+                         <div class="list-group-item text-muted text-center">
+                             <small>ยังไม่มีการจองสำหรับห้องนี้</small>
+                         </div>
+                     {% endfor %}
+                     {% if room.bookings.all|length > 5 %}
+                         <div class="list-group-item text-muted text-center"><small>...</small></div>
+                     {% endif %}
+                 </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ระบบจองคาราโอเกะ{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- กำหนด Font และ Background --- */
+        body {
+            font-family: 'Kanit', sans-serif; /* ใช้ฟอนต์ Kanit */
+            background-color: #f0f2f5; /* เปลี่ยนสีพื้นหลังเว็บ */
+            padding-top: 0;
+            padding-bottom: 20px;
+        }
+
+        /* --- Navbar CSS (จากครั้งก่อน) --- */
+        .navbar.custom-navbar {
+            background-color: #1c1e21; /* อาจจะปรับสีเข้มเล็กน้อย */
+            padding-top: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 4px solid #ffc107; /* ทำให้เส้นหนาขึ้น */
+            box-shadow: 0 2px 4px rgba(0,0,0,.1); /* เพิ่มเงาเล็กน้อย */
+        }
+        .navbar.custom-navbar .navbar-brand { color: #ffffff; font-weight: bold; }
+        .navbar.custom-navbar .navbar-brand img { height: 30px; margin-right: 8px; vertical-align: middle; }
+        .navbar.custom-navbar .navbar-nav .nav-link { color: rgba(255, 255, 255, 0.8); padding: 0.5rem 1rem; margin-left: 0.5rem; border-bottom: 4px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; }
+        .navbar.custom-navbar .navbar-nav .nav-link:hover { color: #ffffff; }
+        .navbar.custom-navbar .navbar-nav .nav-link.active { color: #ffffff; font-weight: bold; border-bottom-color: #ffc107; }
+        .navbar.custom-navbar .navbar-nav .nav-link i { margin-right: 5px; }
+        /* ปรับ style ของ dropdown ให้เข้ากับ theme */
+        .navbar.custom-navbar .navbar-nav .dropdown-toggle { color: rgba(255, 255, 255, 0.8); }
+        .navbar.custom-navbar .navbar-nav .dropdown-toggle:hover { color: #ffffff; }
+        .navbar.custom-navbar .navbar-nav .dropdown-menu { background-color: #212529; border: 1px solid rgba(255, 255, 255, 0.15); }
+        .navbar.custom-navbar .navbar-nav .dropdown-item { color: rgba(255, 255, 255, 0.8); }
+        .navbar.custom-navbar .navbar-nav .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.1); color: #ffffff; }
+        .navbar.custom-navbar .navbar-nav .dropdown-item i { color: rgba(255, 255, 255, 0.6); }
+        /* ปุ่ม login เดิม */
+        .navbar.custom-navbar .navbar-nav .nav-item.login-button .nav-link { background-color: #e44d26; /* เปลี่ยนเป็นสีส้มแดง */ color: #ffffff; border-radius: 5px; padding: 0.5rem 1rem; font-weight: bold; border-bottom-color: transparent !important; }
+        .navbar.custom-navbar .navbar-nav .nav-item.login-button .nav-link:hover { background-color: #f55d3e; color: #ffffff; }
+        /* ----------------------------------------------- */
+
+        /* --- สไตล์ทั่วไป --- */
+        .container { max-width: 1140px; } /* อาจจะขยาย container ให้กว้างขึ้น */
+        main { background-color: #ffffff; padding: 2rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); margin-top: 2rem; } /* ใส่พื้นหลังขาวให้ content หลัก */
+        footer { margin-top: 3rem; }
+
+        /* --- สไตล์สำหรับ Card --- */
+        .card {
+            border: none; /* เอาเส้นขอบ card ออก */
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); /* ใส่เงาให้ card */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+             transform: translateY(-5px); /* ทำให้การ์ดลอยขึ้นเมื่อ hover */
+             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+        .card-footer {
+            background-color: #f8f9fa; /* สีพื้นหลังส่วน footer ของ card */
+            border-top: 1px solid #dee2e6;
+        }
+        .card-img-top {
+             aspect-ratio: 16 / 9; /* กำหนดอัตราส่วนรูปภาพ */
+             object-fit: cover; /* ทำให้รูปภาพเต็มกรอบโดยไม่เสียสัดส่วน */
+        }
+
+        /* --- สไตล์ปุ่ม --- */
+        .btn-primary {
+            background-color: #ff6d18; /* สีหลัก */
+            border-color: #ff8138;
+        }
+         .btn-primary:hover {
+            background-color: #fd995f;
+            border-color: #fd995f;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-success {
+             background-color: #198754;
+            border-color: #198754;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'room_list' %}">
+                 🎤 คาราโอเกะซิตี้
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 30 30\'%3e%3cpath stroke=\'rgba(255, 255, 255, 0.8)\' stroke-linecap=\'round\' stroke-miterlimit=\'10\' stroke-width=\'2\' d=\'M4 7h22M4 15h22M4 23h22\'/%3e%3c/svg%3e');"></span> {# ทำให้ icon สีขาว #}
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'room_list' %}active{% endif %}" aria-current="page" href="{% url 'room_list' %}"><i class="fas fa-calendar-alt"></i> จองห้อง</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'all_bookings' %}active{% endif %}" href="{% url 'all_bookings' %}"><i class="fas fa-list-check"></i> เช็คห้อง</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#contactModal">
+                    <i class="fas fa-phone-alt"></i> ติดต่อเรา
+                  </a>
+                </li>
+
+                {% comment %} ส่วนแสดงชื่อผู้ใช้และปุ่มออกจากระบบ หรือ ปุ่มเข้าสู่ระบบ {% endcomment %}
+                {% if user.is_authenticated %}
+                    {% comment %} --- แสดงเมื่อผู้ใช้ล็อกอินแล้ว --- {% endcomment %}
+                    <li class="nav-item dropdown ms-lg-3"> {# เปลี่ยนเป็น dropdown เพื่อรองรับเมนูย่อย #}
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i> {{ user.username }} {# แสดงไอคอนและชื่อผู้ใช้ #}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown"> {# จัดเมนูชิดขวา #}
+                            {% comment %} เพิ่มลิงก์อื่นๆ ที่นี่ได้ เช่น โปรไฟล์, ตั้งค่า {% endcomment %}
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i> ออกจากระบบ</a></li> {# ลิงก์ออกจากระบบ #}
+                        </ul>
+                    </li>
+                {% else %}
+                    {% comment %} --- แสดงเมื่อผู้ใช้ยังไม่ได้ล็อกอิน --- {% endcomment %}
+                    <li class="nav-item login-button ms-lg-3"> {# ใช้รูปแบบเดิม #}
+                      <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user-circle"></i> เข้าสู่ระบบ</a>
+                    </li>
+                {% endif %}
+                {% comment %} --- จบส่วน Login/Logout --- {% endcomment %}
+
+              </ul>
+            </div>
+        </div>
+    </nav>
+
+    {# ย้าย container หลักมาไว้ข้างนอก main และ footer #}
+    <div class="container mt-4">
+        {% if messages %}
+        <div class="mb-3"> {# ใช้ mb แทน mt #}
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# ใส่พื้นหลังขาวให้ส่วน main #}
+        <main>
+
+
+{% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top text-center">
+            <small class="d-block mb-3 text-muted">&copy; 2025 - คาราโอเกะซิตี้</small>
+        </footer>
+    </div><div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="contactModalLabel"><i class="fas fa-envelope me-2"></i>ติดต่อ/แจ้งปัญหา</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+             <form id="contact-form-modal" action="#" method="POST">
+               {% csrf_token %}
+               <div class="mb-3">
+                 <label for="contact-name" class="form-label">ชื่อผู้แจ้ง</label>
+                 <input type="text" class="form-control" id="contact-name" name="name" required>
+               </div>
+               <div class="mb-3">
+                 <label for="contact-email" class="form-label">อีเมล (สำหรับการติดต่อกลับ ถ้ามี)</label>
+                 <input type="email" class="form-control" id="contact-email" name="email">
+               </div>
+               <div class="mb-3">
+                 <label for="contact-message" class="form-label">รายละเอียดปัญหา/ข้อเสนอแนะ</label>
+                 <textarea class="form-control" id="contact-message" name="message" rows="4" required></textarea>
+               </div>
+             </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+            <button type="button" class="btn btn-primary">ส่งข้อมูล</button> {# ปุ่มส่งใน Modal ยังไม่ได้เชื่อมกับ view #}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
