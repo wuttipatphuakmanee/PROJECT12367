@@ -94,6 +94,9 @@
 ```
 kraoke_project/
 ├── accounts/                           # ระบบผู้ใช้
+├── accounts/templates/                 # ฟอร์มติดต่อทีมงาน
+│           ├── login.html              # แบบฟอร์มเข้าสู่ระบบ
+│           └── register.html           # แบบฟอร์มสมัครสมาชิก
 ├── booking/                            # ฟังก์ชันในการจองทั้งหมด
 ├── booking/templates/                  # ฟอร์มติดต่อทีมงาน
 │           ├── base.html               # Navbar & Footer
